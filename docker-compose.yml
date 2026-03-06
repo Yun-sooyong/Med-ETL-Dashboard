@@ -1,0 +1,20 @@
+services:
+  db: 
+    image: postgres:16
+    restart: always
+    container_name: medi_postgre
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      # - medi_postgre:/var/lib/medi_postgre/data
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      retries: 5  
+volumes: 
+  medi_postgre:
